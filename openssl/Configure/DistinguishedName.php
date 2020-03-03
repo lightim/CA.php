@@ -312,4 +312,27 @@ class DistinguishedName
             $dn['organizationalUnitName'] ?? null
         );
     }
+
+    /**
+     * Use example data to create
+     *
+     * @param string $commonName
+     * 
+     * @static
+     * 
+     * @return self
+     */
+    public static function fromExampleData(
+        string $commonName = null
+    ): self {
+        return new self(
+            $commonName ?? "Lightim OpenSSL Test Certificate",
+            "test-cert@dev.lightim.pw",
+            "CN",
+            "Jiangsu",
+            "Unknown Town",
+            "lightim dev test",
+            "Tech Department"
+        );
+    }
 }

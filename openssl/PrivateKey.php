@@ -17,6 +17,7 @@
 namespace Lightim\Utils\OpenSSL;
 
 use Lightim\Utils\OpenSSL\Configure\ConfigureArguments;
+use Lightim\Utils\OpenSSL\Configure\KeyType;
 
 class PrivateKey
 {
@@ -63,6 +64,106 @@ class PrivateKey
         }
         $this->resource = $res;
         return $this;
+    }
+
+    /**
+     * Get details of the key
+     *
+     * @return array
+     */
+    public function getDetails(): array
+    {
+        return openssl_pkey_get_details($this->resource);
+    }
+
+    /**
+     * Get Key Bits
+     *
+     * @return int
+     */
+    public function getKeyBits(): int
+    {
+        return $this->getDetails()['bits'];
+    }
+
+    /**
+     * Get Key Type
+     *
+     * Returns one of:
+     * KeyType::EC
+     * KeyType::RSA
+     * KeyType::DSA
+     * KeyType::DH
+     * 
+     * @return int
+     */
+    public function getKeyType(): int
+    {
+        switch (array_keys($this->getDetails())[2]) {
+            case 'ecc':
+                return KeyType::EC;
+            case 'rsa':
+                return KeyType::RSA;
+            case 'dsa':
+                return KeyType::DSA;
+            case 'dh':
+                return KeyType::DH;
+        }
+        return -1;
+    }
+
+    /**
+     * Check if the key is ECC Key
+     *
+     * @return bool
+     */
+    public function isECCKey(): bool
+    {
+        return $this->getKeyType() === KeyType::EC;
+    }
+
+    /**
+     * Check if the key is RSA Key
+     *
+     * @return bool
+     */
+    public function isRSAKey(): bool
+    {
+        return $this->getKeyType() === KeyType::RSA;
+    }
+
+    /**
+     * Check if the key is DSA Key
+     *
+     * @return bool
+     */
+    public function isDSAKey(): bool
+    {
+        return $this->getKeyType() === KeyType::DSA;
+    }
+
+    /**
+     * Check if the key is DH Key
+     *
+     * @return bool
+     */
+    public function isDHKey(): bool
+    {
+        return $this->getKeyType() === KeyType::DH;
+    }
+
+    /**
+     * Get Curve Name
+     *
+     * @throws OpenSSLException
+     * @return string
+     */
+    public function getCurveName(): string
+    {
+        if (!$this->isECCKey()) {
+            throw new OpenSSLException('This is not an ECC Key');
+        }
+        return $this->getDetails()['ec']['curve_name'];
     }
 
     /**
