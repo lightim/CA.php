@@ -1,0 +1,19 @@
+{
+    "name": "lightim/ca",
+    "description": "Lightim CA Server repository",
+    "type": "library",
+    "require": {
+        "ext-openssl": "*",
+        "php": ">=7.0"
+    },
+    "license": "MIT",
+    "authors": [{
+        "name": "Tianle Xu",
+        "email": "xtl@xtlsoft.top"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Lightim\\Utils\\OpenSSL\\": "./openssl/"
+        }
+    }
+}

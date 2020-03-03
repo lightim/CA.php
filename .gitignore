@@ -1,0 +1,9 @@
+/vendor/
+
+# composer.lock
+
+/.vscode/
+dev-*.php
+*.crt
+*.cer
+*.key
